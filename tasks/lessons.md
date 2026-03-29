@@ -1,3 +1,4 @@
 # Haxball Architecture Lessons
 - `rustup` should be installed locally inside the workspace to bypass strict `macOS` and `.npm` cache permission limits.
 - Background throttling in Tauri depends heavily on OS-level thread management and disabling standard window constraints.
+- **Critical V8 Event Loop Lesson:** Overriding `setTimeout/setInterval` with a `0ms` sub-millisecond `MessageChannel` or `Web Worker` polyfill creates severe **Main Thread Event Loop Starvation**. The game's DOM `KeyboardEvent` queue physically gets blocked behind a backlog of thousands of `postMessage` physics ticks, resulting in a false "Ping-like" 3-second input delay, EVEN if the user is the 0-ping Host. Do not artificially accelerate HTML5 timers beyond the engine's physics tick rate without `requestAnimationFrame` yielding.
