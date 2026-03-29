@@ -7,6 +7,7 @@
 - [x] Build & Test.
 - [x] Implement HackTimer Worker inject for 0ms sub-millisecond network precision.
 - [x] Implement Space (KeyCode 32) and X (KeyCode 88) Auto-Kick spammers.
+- [ ] ROLLBACK: Remove HackTimer to fix 3-second input latency caused by WebRTC Lockstep Desyncs.
 
 **Results Log:**
 *(will be updated post-verification)*

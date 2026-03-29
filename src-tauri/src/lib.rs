@@ -22,72 +22,7 @@ pub fn run() {
                 Object.defineProperty(document, 'visibilityState', { get: function() { return 'visible'; }, configurable: true });
                 Object.defineProperty(document, 'hidden', { get: function() { return false; }, configurable: true });
 
-                // 2. HackTimer (0ms precision for WebRTC and Physics sync via Web Worker)
-                try {
-                    const workerCode = `
-                        let timers = {};
-                        self.onmessage = function(e) {
-                            if (e.data.command === 'setInterval') {
-                                timers[e.data.id] = setInterval(() => postMessage({id: e.data.id}), e.data.timeout);
-                            } else if (e.data.command === 'clearInterval') {
-                                clearInterval(timers[e.data.id]);
-                            } else if (e.data.command === 'setTimeout') {
-                                timers[e.data.id] = setTimeout(() => postMessage({id: e.data.id}), e.data.timeout);
-                            } else if (e.data.command === 'clearTimeout') {
-                                clearTimeout(timers[e.data.id]);
-                            }
-                        };
-                    `;
-                    const blob = new Blob([workerCode], {type: 'application/javascript'});
-                    const worker = new Worker(URL.createObjectURL(blob));
-                    
-                    let timerId = 1;
-                    const callbacks = {};
-                    
-                    worker.onmessage = function(e) {
-                        const id = e.data.id;
-                        if (callbacks[id]) {
-                            callbacks[id].fn.apply(null, callbacks[id].args);
-                            if (!callbacks[id].isInterval) delete callbacks[id];
-                        }
-                    };
-
-                    const _originalSetInterval = window.setInterval;
-                    const _originalClearInterval = window.clearInterval;
-                    const _originalSetTimeout = window.setTimeout;
-                    const _originalClearTimeout = window.clearTimeout;
-
-                    window.setInterval = function(fn, time, ...args) {
-                        if (typeof fn !== 'function') return _originalSetInterval(fn, time, ...args);
-                        const id = timerId++;
-                        callbacks[id] = { fn, isInterval: true, args };
-                        worker.postMessage({command: 'setInterval', id, timeout: time || 0});
-                        return id;
-                    };
-                    window.clearInterval = function(id) {
-                        if (callbacks[id]) {
-                            delete callbacks[id];
-                            worker.postMessage({command: 'clearInterval', id});
-                        } else {
-                            _originalClearInterval(id);
-                        }
-                    };
-                    window.setTimeout = function(fn, time, ...args) {
-                        if (typeof fn !== 'function') return _originalSetTimeout(fn, time, ...args);
-                        const id = timerId++;
-                        callbacks[id] = { fn, isInterval: false, args };
-                        worker.postMessage({command: 'setTimeout', id, timeout: time || 0});
-                        return id;
-                    };
-                    window.clearTimeout = function(id) {
-                        if (callbacks[id]) {
-                            delete callbacks[id];
-                            worker.postMessage({command: 'clearTimeout', id});
-                        } else {
-                            _originalClearTimeout(id);
-                        }
-                    };
-                } catch (e) { console.error("HackTimer failed", e); }
+                // 2. [REMOVED HACKTIMER TO PREVENT NETWORK DESYNC]
 
                 // 3. Auto-Kick Anti-Ghosting Spam Macro (60Hz) & URL Navigator
                 let activeMacros = {};
