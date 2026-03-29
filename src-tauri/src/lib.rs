@@ -30,8 +30,8 @@ pub fn run() {
                 const MACRO_KEYS = ['Space', 'KeyX']; 
                 
                 window.addEventListener('keydown', function(e) {
-                    // Custom URL Navigator (Cmd+L / Ctrl+L) via Custom HTML Dialog
-                    if ((e.metaKey || e.ctrlKey) && e.code === 'KeyL') {
+                    // Custom URL Navigator (F4) via Custom HTML Dialog
+                    if (e.code === 'F4') {
                         e.preventDefault();
                         e.stopImmediatePropagation();
                         
