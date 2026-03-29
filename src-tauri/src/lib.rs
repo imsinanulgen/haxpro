@@ -26,7 +26,9 @@ pub fn run() {
 
                 // 3. Auto-Kick Anti-Ghosting Spam Macro (60Hz) & URL Navigator
                 let activeMacros = {};
-                // We monitor Space and X
+                const MACRO_KEYS = ['Space', 'KeyX']; 
+                
+                window.addEventListener('keydown', function(e) {
                     // Custom URL Navigator via Option+L (Alt+L)
                     if (e.altKey && e.code === 'KeyL') {
                         e.preventDefault();
@@ -34,8 +36,6 @@ pub fn run() {
                         window.haxproShowNav();
                         return;
                     }
-
-                    // Macro processing
                     if (MACRO_KEYS.includes(e.code) && e.isTrusted) {
                         if (!activeMacros[e.code]) {
                             activeMacros[e.code] = setInterval(() => {
