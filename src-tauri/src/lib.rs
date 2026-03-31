@@ -13,6 +13,7 @@ pub fn run() {
                 WebviewUrl::External("https://www.haxball.com/play".parse().unwrap())
             )
             .fullscreen(true)
+            .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36")
             .initialization_script(r#"
                 (function() {
                     // 1. Anti Throttling & Visibility Force
