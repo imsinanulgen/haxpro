@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "HaxPro",
+  "version": "5.0",
+  "description": "Haxball Performance Optimizer",
+  "content_scripts": [
+    {
+      "matches": ["*://www.haxball.com/*", "*://haxball.com/*"],
+      "js": ["content.js"],
+      "all_frames": true,
+      "run_at": "document_start",
+      "match_about_blank": true
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["inject.js"],
+      "matches": ["*://www.haxball.com/*", "*://haxball.com/*"]
+    }
+  ]
+}
